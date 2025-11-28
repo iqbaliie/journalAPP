@@ -11,5 +11,44 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
+
+model JournalEntry {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Board {
+
+  id              Int             @id @default(autoincrement())
+  name            String
+  type            String?
+  stockRows       StockRow[]
+
+}
+
+model StockRow {
+
+  id              Int             @id @default(autoincrement())
+  board           Board @relation(fields: [boardId], references: [id]) 
+   // kolom-kolom stok barang
+  item              String
+  okt               String?
+  yardAwal          Float
+  sisaYard          Float
+  tanggalAwalRoll   DateTime?   // nanti kita isi dengan date-only, tapi Prisma pakai DateTime
+  terjual           Float?      // boleh null kalau belum ada penjualan
+  lokasiRollBantal  String?
+  stockOpname       Float?      // hasil cek fisik
+  sku               String?
+  stockOpnameCheck  Boolean     @default(false) // sudah dicek waktu opname atau belum
+  keterangan        String?
+  cekAktual         String?     // misal "OK", "kurang 1 yard", dll
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+} 
