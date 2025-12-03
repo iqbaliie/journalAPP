@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  // cek apakah board stok barang sudah ada
   const existing = await prisma.board.findFirst({
     where: { name: "Board Stok Barang" },
   });

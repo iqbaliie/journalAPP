@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -21,34 +15,35 @@ model JournalEntry {
   updatedAt DateTime @updatedAt
 }
 
-
 model Board {
+  id        Int        @id @default(autoincrement())
+  name      String
+  type      String?
+  stockRows StockRow[]
 
-  id              Int             @id @default(autoincrement())
-  name            String
-  type            String?
-  stockRows       StockRow[]
-
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model StockRow {
+  id    Int   @id @default(autoincrement())
 
-  id              Int             @id @default(autoincrement())
-  board           Board @relation(fields: [boardId], references: [id]) 
-   // kolom-kolom stok barang
+  board   Board @relation(fields: [boardId], references: [id])
+  boardId Int
+
   item              String
   okt               String?
   yardAwal          Float
   sisaYard          Float
-  tanggalAwalRoll   DateTime?   // nanti kita isi dengan date-only, tapi Prisma pakai DateTime
-  terjual           Float?      // boleh null kalau belum ada penjualan
+  tanggalAwalRoll   DateTime?
+  terjual           Float?
   lokasiRollBantal  String?
-  stockOpname       Float?      // hasil cek fisik
+  stockOpname       Float?
   sku               String?
-  stockOpnameCheck  Boolean     @default(false) // sudah dicek waktu opname atau belum
+  stockOpnameCheck  Boolean   @default(false)
   keterangan        String?
-  cekAktual         String?     // misal "OK", "kurang 1 yard", dll
+  cekAktual         String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-} 
+}
